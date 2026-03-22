@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Primary Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Playground</title>
+    <title>SQL Playground - Online SQL Editor & Database Simulator</title>
+    <meta name="title" content="SQL Playground - Online SQL Editor & Database Simulator">
+    <meta name="description" content="A free, in-browser SQL playground to practice SQLite queries. Run SQL, test JOINs, and manage dummy tables with a real-time WASM database engine. No setup required.">
+    <meta name="keywords" content="SQL playground, online SQL editor, practice SQL online, SQL simulator, SQLite browser, database practice, SQL join practice, learn SQL">
+    <meta name="author" content="Anirudh Vijay">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/Anirudh-Vijay2">
+    <meta property="og:title" content="SQL Playground - Online SQL Editor & Database Simulator">
+    <meta property="og:description" content="Practice SQL in your browser with a real-time SQLite engine. Interactive schema explorer and pre-seeded dummy tables included.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1544383335-c533a4ad2836?auto=format&fit=crop&q=80&w=1200&h=630">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="SQL Playground - Online SQL Editor">
+    <meta property="twitter:description" content="A free, in-browser SQL playground to practice SQLite queries with zero setup.">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SQL Playground",
+      "description": "An interactive online SQL editor for practicing SQLite queries with real-time feedback.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "author": {
+        "@type": "Person",
+        "name": "Anirudh Vijay",
+        "url": "https://github.com/Anirudh-Vijay2"
+      }
+    }
+    </script>
     
     <!-- External Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     
-    <!-- 1. CSS SECTION (You can move this to style.css) -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
         
-        :root {
-            --indigo-primary: #4338ca;
-        }
-
         .code-font {
             font-family: 'Fira Code', monospace;
         }
@@ -55,15 +85,19 @@
             z-index: 100;
         }
 
-        @media (max-width: 640px) {
-            .mobile-padding { padding: 1rem; }
-            button { min-height: 44px; }
+        /* Developer Link Styling */
+        .dev-link {
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .dev-link:hover {
+            color: #4338ca;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col font-sans overflow-x-hidden">
 
-    <!-- 2. HTML SECTION -->
     <header class="bg-indigo-700 text-white p-4 shadow-lg sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -72,10 +106,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                     </svg>
                 </div>
-                <h1 class="text-lg font-bold">SQL Playground</h1>
+                <h1 class="text-lg font-bold tracking-tight">SQL Playground</h1>
             </div>
-            <div class="hidden sm:block px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/20">
-                SQLite WASM Engine
+            <div class="hidden sm:block">
+                <a href="https://github.com/Anirudh-Vijay2" target="_blank" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full border border-white/20 transition-all text-xs font-medium">
+                    <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    <span>Anirudh-Vijay2</span>
+                </a>
             </div>
         </div>
     </header>
@@ -94,11 +131,11 @@
                     </h2>
                 </div>
                 <div class="p-4 space-y-4 text-xs">
-                    <p><strong class="text-white">Run SQL:</strong> Type in the editor and hit "Run". Try <code>SELECT * FROM Users;</code></p>
-                    <p><strong class="text-white">Schema:</strong> Click table names below to see columns.</p>
+                    <p><strong class="text-white">Writing Queries:</strong> This environment uses SQLite. Try <code>SELECT * FROM Users;</code></p>
+                    <p><strong class="text-white">Schema View:</strong> Click table names below to see structure. Clicking the <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 inline" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg> icon views all data instantly.</p>
                     <div class="pt-2 border-t border-indigo-700/50">
                         <button onclick="resetDatabase()" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded shadow-sm transition-all active:scale-95">
-                            Reset & Refresh
+                            Reset All Data & Refresh
                         </button>
                     </div>
                 </div>
@@ -109,7 +146,7 @@
                     <h2 class="font-bold text-slate-500 text-[10px] uppercase tracking-widest">Database Schema</h2>
                 </div>
                 <div id="schema-list" class="p-4 space-y-3 overflow-y-auto custom-scrollbar">
-                    <div class="text-slate-400 text-sm animate-pulse">Loading engine...</div>
+                    <div class="text-slate-400 text-sm animate-pulse">Initializing engine...</div>
                 </div>
             </div>
         </aside>
@@ -117,22 +154,22 @@
         <!-- Main Workspace -->
         <section class="flex-grow flex flex-col gap-6 order-1 lg:order-2">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
-                <div class="flex items-center justify-between px-4 py-2 border-b border-slate-100 bg-slate-50">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SQL Editor</span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-2 border-b border-slate-100 bg-slate-50 gap-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SQL Query Editor</span>
                     <div class="flex items-center space-x-2">
-                        <button onclick="clearEditor()" class="text-xs font-medium text-slate-400 hover:text-slate-600 px-2 py-1">Clear</button>
+                        <button onclick="clearEditor()" class="text-xs font-medium text-slate-400 hover:text-slate-600 px-2 py-1">Clear Editor</button>
                         <button onclick="runQuery()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-md transition-all active:scale-95 flex items-center">
                             Run Query
                         </button>
                     </div>
                 </div>
-                <textarea id="editor" spellcheck="false" class="p-4 w-full code-font text-indigo-950 focus:outline-none text-base bg-white" placeholder="-- Enter SQL here..."></textarea>
+                <textarea id="editor" spellcheck="false" class="p-4 w-full code-font text-indigo-950 focus:outline-none text-base bg-white" placeholder="-- Try: SELECT * FROM Products;"></textarea>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex-grow flex flex-col overflow-hidden min-h-[400px]">
                 <div class="px-4 py-3 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Execution Results</span>
-                    <span id="result-meta" class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">Idle</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Query Results</span>
+                    <span id="result-meta" class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">No query active</span>
                 </div>
                 
                 <div id="results-container" class="flex-grow overflow-auto custom-scrollbar">
@@ -140,10 +177,15 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        <p>Waiting for query...</p>
+                        <p class="text-sm font-medium">Ready for your first SQL query...</p>
                     </div>
-                    <div id="error-box" class="hidden m-6 p-4 bg-red-50 border-l-4 border-red-500 rounded text-red-700 text-sm code-font"></div>
-                    <div id="table-wrapper" class="hidden min-w-full"><table class="w-full text-left border-collapse"><thead id="table-head" class="bg-slate-50 sticky top-0"></thead><tbody id="table-body" class="divide-y divide-slate-100"></tbody></table></div>
+                    <div id="error-box" class="hidden m-6 p-4 bg-red-50 border-l-4 border-red-500 rounded text-red-700 text-sm code-font whitespace-pre-wrap"></div>
+                    <div id="table-wrapper" class="hidden min-w-full overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead id="table-head" class="bg-slate-50 sticky top-0 shadow-sm"></thead>
+                            <tbody id="table-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
                     <div id="success-box" class="hidden m-12 text-center">
                         <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -157,7 +199,16 @@
 
     <div id="toast-container" class="pointer-events-none"></div>
 
-    <!-- 3. JAVASCRIPT SECTION (You can move this to script.js) -->
+    <footer class="p-6 text-center text-slate-400 text-xs border-t border-slate-200 bg-white sm:flex sm:justify-between sm:items-center">
+        <div class="mb-4 sm:mb-0">
+            &copy; 2024 SQL Playground Engine &bull; Developed by <a href="https://github.com/Anirudh-Vijay2" target="_blank" class="dev-link font-bold text-slate-600 hover:text-indigo-600">Anirudh Vijay</a>
+        </div>
+        <div class="flex justify-center space-x-4">
+            <a href="https://github.com/Anirudh-Vijay2" target="_blank" class="text-slate-400 hover:text-slate-600 transition-colors">GitHub Profile</a>
+            <span class="px-2 py-1 bg-slate-100 rounded text-[9px] font-bold">V1.2.5 (SEO Optimized)</span>
+        </div>
+    </footer>
+
     <script>
         let db;
         let SQLInstance;
@@ -188,16 +239,18 @@
                     toast("Database Factory Reset Successful");
                 }
             } catch (e) {
-                dom.schema.innerHTML = `<div class="text-red-500 text-xs">Engine Error: ${e.message}</div>`;
+                dom.schema.innerHTML = `<div class="text-red-500 text-xs font-bold">Failed to load SQL engine.</div>`;
             }
         }
 
         function seed() {
             db.run(`
-                CREATE TABLE Users (id INTEGER PRIMARY KEY, name TEXT, email TEXT);
-                INSERT INTO Users VALUES (1, 'Alice Johnson', 'alice@example.com'), (2, 'Bob Smith', 'bob@example.com');
-                CREATE TABLE Products (id INTEGER PRIMARY KEY, name TEXT, price DECIMAL);
-                INSERT INTO Products VALUES (1, 'Laptop', 1200), (2, 'Phone', 800);
+                CREATE TABLE Users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, joined_at DATE);
+                INSERT INTO Users VALUES (1, 'Alice Johnson', 'alice@example.com', '2023-01-15'), (2, 'Bob Smith', 'bob@example.com', '2023-02-20'), (3, 'Charlie Brown', 'charlie@example.com', '2023-05-12');
+                CREATE TABLE Products (id INTEGER PRIMARY KEY, name TEXT, category TEXT, price DECIMAL);
+                INSERT INTO Products VALUES (1, 'MacBook Air', 'Electronics', 999.00), (2, 'iPhone 15', 'Electronics', 799.00), (3, 'Coffee Mug', 'Kitchen', 12.50);
+                CREATE TABLE Orders (id INTEGER PRIMARY KEY, user_id INTEGER, product_id INTEGER, amount INTEGER);
+                INSERT INTO Orders VALUES (101, 1, 1, 1), (102, 1, 3, 2), (103, 2, 2, 1);
             `);
         }
 
@@ -213,8 +266,10 @@
             let sql = dom.editor.value.trim();
             if (!sql) return;
 
+            // Handle Describe alias
             if (sql.toLowerCase().startsWith('describe ')) {
-                sql = `PRAGMA table_info(${sql.split(' ')[1].replace(';', '')});`;
+                const tableName = sql.split(' ')[1].replace(';', '');
+                sql = `PRAGMA table_info(${tableName});`;
             }
 
             [dom.empty, dom.error, dom.table, dom.success].forEach(el => el.classList.add('hidden'));
@@ -224,45 +279,49 @@
                 if (res.length > 0) {
                     const data = res[res.length - 1];
                     dom.table.classList.remove('hidden');
-                    dom.head.innerHTML = `<tr>${data.columns.map(c => `<th class="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase border-b border-slate-200">${c}</th>`).join('')}</tr>`;
-                    dom.body.innerHTML = data.values.map(r => `<tr>${r.map(v => `<td class="px-4 py-3 text-sm text-slate-600 border-b border-slate-50">${v??'NULL'}</td>`).join('')}</tr>`).join('');
-                    dom.meta.innerText = `${data.values.length} results`;
+                    dom.head.innerHTML = `<tr>${data.columns.map(c => `<th class="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase border-b border-slate-200">${c}</th>`).join('')}</tr>`;
+                    dom.body.innerHTML = data.values.map(r => `<tr>${r.map(v => `<td class="px-4 py-3 text-sm text-slate-600 border-b border-slate-50">${v??'<span class="text-slate-300 italic text-xs">null</span>'}</td>`).join('')}</tr>`).join('');
+                    dom.meta.innerText = `${data.values.length} records returned`;
                 } else {
                     dom.success.classList.remove('hidden');
-                    dom.successText.innerText = "Query executed successfully.";
-                    dom.meta.innerText = "Success";
-                    toast("Done!");
+                    dom.successText.innerText = "Operation completed successfully.";
+                    dom.meta.innerText = "Done";
+                    toast("Execution Successful");
                 }
                 updateUI();
             } catch (e) {
                 dom.error.classList.remove('hidden');
-                dom.error.innerText = e.message;
+                dom.error.innerText = `SQL Error: ${e.message}`;
                 dom.meta.innerText = "Error";
-                toast("SQL Error", "error");
+                toast("Query Failed", "error");
             }
         }
 
         function updateUI() {
-            const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
-            if (tables.length === 0 || tables[0].values.length === 0) {
-                dom.schema.innerHTML = `<p class="text-slate-400 text-xs italic">Empty database</p>`;
-                return;
-            }
-            dom.schema.innerHTML = tables[0].values.map(t => {
-                const count = db.exec(`SELECT COUNT(*) FROM ${t[0]}`)[0].values[0][0];
-                return `<div class="border border-slate-100 rounded-lg p-2 bg-white flex justify-between items-center group">
-                    <span class="text-xs font-bold text-slate-700">${t[0]}</span>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-[9px] font-mono text-slate-400">${count} rows</span>
-                        <button onclick="view('${t[0]}')" class="text-indigo-500 hover:text-indigo-700 p-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg></button>
-                    </div>
-                </div>`;
-            }).join('');
+            try {
+                const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+                if (tables.length === 0 || tables[0].values.length === 0) {
+                    dom.schema.innerHTML = `<p class="text-slate-400 text-xs italic">No tables found.</p>`;
+                    return;
+                }
+                dom.schema.innerHTML = tables[0].values.map(t => {
+                    const count = db.exec(`SELECT COUNT(*) FROM ${t[0]}`)[0].values[0][0];
+                    return `<div class="border border-slate-100 rounded-lg p-2 bg-white flex justify-between items-center group shadow-sm">
+                        <span class="text-xs font-bold text-slate-700">${t[0]}</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[9px] font-mono font-bold text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">${count} rows</span>
+                            <button onclick="view('${t[0]}')" class="text-indigo-500 hover:text-indigo-700 p-1 rounded hover:bg-indigo-50 transition-colors" title="Quick Select">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (e) {}
         }
 
         function view(name) { dom.editor.value = `SELECT * FROM ${name};`; runQuery(); }
         function clearEditor() { dom.editor.value = ""; dom.editor.focus(); }
-        function resetDatabase() { if (confirm("Factory reset? This will reload the page.")) { sessionStorage.setItem('reset_toast', 'true'); location.reload(); } }
+        function resetDatabase() { if (confirm("Factory Reset: This will clear all changes and reload the page. Continue?")) { sessionStorage.setItem('reset_toast', 'true'); location.reload(); } }
 
         window.onload = init;
     </script>
